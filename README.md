@@ -6,6 +6,6 @@
 
 ## Main Repo
 
-### [Lab 01](../tree/master/Lab_01/README.md)
+### [Lab 01](../blob/master/Lab_01/README.md)
 
 ### Lab 02
