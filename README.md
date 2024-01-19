@@ -8,4 +8,6 @@
 
 ### [Lab 01](../master/Lab_01/README.md)
 
-### Lab 02
+### [Lab 02](../master/Lab_02/README.md)
+
+### [Lab 03](../master/Lab_03/README.md)
