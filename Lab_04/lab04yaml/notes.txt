@@ -1,0 +1,82 @@
+# Lab 04 Commands
+```
+minikube addons enable metrics-server
+```
+
+```
+kubectl apply -f mongodb-secret.yaml
+```
+
+```
+kubectl apply -f mongodb-data-persistentvolumeclaim.yaml
+```
+
+```
+kubectl apply -f mongo-init-configmap.yaml
+```
+
+```
+kubectl apply -f mongodb-stateful-set.yaml
+```
+
+start shell in mongodb pod
+
+`printEnv`
+
+`mongosh`
+
+`db.getUsers()`
+
+`use admin`
+
+`db.createUser({user: "root", pwd:"password", roles:[{role:"readWrite", db:"myDatabase"}],});`
+
+`db.getUsers()`
+
+```
+kubectl apply -f mongodb-service.yaml
+```
+
+```
+kubectl port-forward svc/mongodb 32000:27017
+```
+
+Open MongoDBCompass → Connect with `root` and `password` using Authentication at port `32000`
+
+```
+kubectl apply -f backend-deployment.yaml
+```
+
+```
+kubectl apply -f backend-service.yaml
+```
+
+```
+kubectl apply -f frontend-deployment.yaml
+```
+
+```
+kubectl apply -f frontend-service.yaml
+```
+
+```
+kubectl apply -f ganache-deployment.yaml
+```
+
+```
+kubectl apply -f ganache-service.yaml
+```
+
+```
+kubectl apply -f all-purpose-roles-users.yaml
+```
+
+```
+kubectl apply -f hpa.yaml
+```
+
+```
+minikube tunnel
+```
+
+Frontend →[`localhost:3000`](http://localhost:3000)

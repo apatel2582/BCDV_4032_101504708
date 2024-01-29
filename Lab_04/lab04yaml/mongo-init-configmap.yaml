@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-init-script
+data:
+  mongo-init.js: |
+    print('Starting the database initialization.');
+
+    db = new Mongo().getDB("admin");
+
+    print("Creating root user.");
+
+    db = db.getSiblingDB("admin");
+
+    db.createUser({
+      user: _getEnv("MONGO_INITDB_ROOT_USERNAME"),
+      pwd: _getEnv("MONGO_INITDB_ROOT_PASSWORD"),
+      roles: [{ role: "readWrite", db: "myDatabase" }],
+    });
+
+    print("Root user created.");
+
+    db.auth({
+      user: _getEnv('MONGO_INITDB_ROOT_USERNAME'),
+      pwd: _getEnv('MONGO_INITDB_ROOT_PASSWORD')
+    });
+
+    db = db.getSiblingDB('docker_db');
+
+    db.createUser({
+        user: _getEnv('MONGO_INITDB_ROOT_USERNAME'),
+        pwd: _getEnv('MONGO_INITDB_ROOT_PASSWORD'),
+        roles: [
+            {
+                role: 'readWrite',
+                db: 'docker_db'
+            }
+        ]
+    });
+
+    print('Database initialization completed.');
+
+    function _getEnv(variable) {
+        return variable in process.env ? process.env[variable] : '';
+    }
+
+  entrypoint.sh: |
+    #!/bin/bash
+
+    # Start MongoDB without forking, with the specified arguments
+    mongod --bind_ip_all --logpath /var/log/mongodb.log &
+
+    # Wait for MongoDB to start
+    sleep 10
+
+    # Run the init script
+    mongosh /data/db/mongo-init.js
+
+    # Wait for mongod process
+    wait

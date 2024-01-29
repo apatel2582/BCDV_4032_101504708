@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.service: mongodb
+  name: mongodb
+spec:
+  serviceName: mongodb
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mongodb
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.32.0 (HEAD)
+      labels:
+        io.kompose.network/docker-ethereum-default: "true"
+        io.kompose.service: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:latest
+          ports:
+            - containerPort: 27017
+              hostPort: 27017
+              protocol: TCP
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: username
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: password
+          command: ["/bin/bash", "/config/entrypoint.sh"]
+          volumeMounts:
+            - name: mongodb-config
+              mountPath: /config
+            - mountPath: /data/db
+              name: mongodb-data
+      volumes:
+        - name: mongodb-config
+          configMap:
+            name: mongo-init-script
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: mongodb-data
+      restartPolicy: Always

@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: all-purpose-user
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: all-purpose-role
+rules:
+  - apiGroups: ["", "apps", "extensions"]
+    resources:
+      [
+        "pods",
+        "services",
+        "deployments",
+        "replicasets",
+        "statefulsets",
+        "secrets",
+        "configmaps",
+        "persistentvolumeclaims",
+      ]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: all-purpose-rolebinding
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: all-purpose-user
+    namespace: default
+roleRef:
+  kind: Role
+  name: all-purpose-role
+  apiGroup: rbac.authorization.k8s.io
