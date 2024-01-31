@@ -11,3 +11,5 @@
 ### [Lab 02](../master/Lab_02/README.md)
 
 ### [Lab 03](../master/Lab_03/README.md)
+
+### [Lab 04](../master/Lab_04/README.md)
