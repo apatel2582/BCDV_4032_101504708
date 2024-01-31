@@ -6,7 +6,7 @@
 
 ## Date: 31st Jan 2024
 
-## Lab 04
+## Lab 05
 
 ### [Lab 05 File](../Lab_05/Lab_05.pdf)
 
